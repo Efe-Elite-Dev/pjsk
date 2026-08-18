@@ -1,4 +1,4 @@
-name: Build PJSK GitHub Bundle
+name: Auto-Build PJSK RMSKIN
 
 on:
   push:
@@ -12,12 +12,29 @@ jobs:
     - name: Repo Kopyala
       uses: actions/checkout@v4
 
-    - name: Tum Dosyalari (Logo, MP3, INI) Ziple
+    - name: Rainmeter Skin Packager ile RMSKIN Derle
       run: |
-        Compress-Archive -Path "PJSK_Custom\*" -DestinationPath "PJSK_Ultimate_Player.zip" -Force
+        $packager = "C:\Program Files\Rainmeter\Addons\SkinPackager\SkinPackager.exe"
+        $source = "$env:GITHUB_WORKSPACE\PJSK_Source"
+        $output = "$env:GITHUB_WORKSPACE\PJSK_Ultimate_Player.rmskin"
+        
+        # Eğer varsayılan yolda yoksa alternatif yolu kontrol et
+        if (-not (Test-Path $packager)) {
+            $packager = "$env:LOCALAPPDATA\Programs\Rainmeter\Addons\SkinPackager\SkinPackager.exe"
+        }
 
-    - name: Artifact Olarak Kaydet
+        Write-Host "Paketleme baslatiliyor..."
+        & $packager $source $output
+        
+        if (Test-Path $output) {
+            Write-Host "RMSKIN basariyla olusturuldu!"
+        } else {
+            Write-Error "Paketleme basarisiz oldu!"
+            exit 1
+        }
+
+    - name: RMSKIN Dosyasini Artifact Olarak Yukle
       uses: actions/upload-artifact@v4
       with:
-        name: PJSK-Bundle
-        path: PJSK_Ultimate_Player.zip
+        name: PJSK-Ultimate-Player-RMSKIN
+        path: PJSK_Ultimate_Player.rmskin

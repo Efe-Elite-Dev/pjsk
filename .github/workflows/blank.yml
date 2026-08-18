@@ -1,4 +1,4 @@
-name: Build Direct RMSKIN
+name: Build PJSK Pure Folder
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
     - name: Repo Kopyala
       uses: actions/checkout@v4
 
-    - name: Dosyalari RMSKIN Olarak Paketle
+    - name: PJSK_Custom Klasorunu Arsivle
       run: |
         $workspace = "$env:GITHUB_WORKSPACE"
         $targetDir = "$workspace\PJSK_Custom"
@@ -20,17 +20,14 @@ jobs:
         # Eğer dosyalar ana dizindeyse PJSK_Custom klasöründe topla
         if (-not (Test-Path $targetDir)) {
             New-Item -ItemType Directory -Force -Path $targetDir
-            Get-ChildItem -Path $workspace -Exclude ".github", "PJSK_Custom", "*.rmskin" | Move-Item -Destination $targetDir -Force
+            Get-ChildItem -Path $workspace -Exclude ".github", "PJSK_Custom", "*.zip" | Move-Item -Destination $targetDir -Force
         }
         
-        # Doğrudan .rmskin uzantılı arşiv oluştur
-        $output = "$workspace\PJSK_Ultimate_Player.rmskin"
+        $output = "$workspace\PJSK_Custom.zip"
         Compress-Archive -Path $targetDir -DestinationPath $output -Force
-        
-        Write-Host "RMSKIN dosyasi basariyla olusturuldu!"
 
-    - name: RMSKIN Dosyasini Artifact Olarak Yukle
+    - name: Zipli Paketi Yukle
       uses: actions/upload-artifact@v4
       with:
-        name: PJSK-Ultimate-Player-RMSKIN
-        path: PJSK_Ultimate_Player.rmskin
+        name: PJSK-Custom-Folder
+        path: PJSK_Custom.zip

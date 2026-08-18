@@ -1,0 +1,24 @@
+name: Build PJSK RMSKIN Package
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Repo'yu Kopyala
+      uses: actions/checkout@v4
+
+    - name: RMSKIN Uzantılı Paket Oluştur
+      run: |
+        # Klasörü .rmskin formatında zip olarak paketle ve adlandır
+        Compress-Archive -Path "PJSK_Custom" -DestinationPath "PJSK_Project_Sekai_Player.rmskin" -Force
+
+    - name: Artifact Olarak Kaydet
+      uses: actions/upload-artifact@v4
+      with:
+        name: PJSK-Custom-Skin
+        path: PJSK_Project_Sekai_Player.rmskin

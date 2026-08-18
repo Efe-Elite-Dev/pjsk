@@ -1,4 +1,4 @@
-name: Build PJSK Zip Package
+name: Build PJSK GitHub Bundle
 
 on:
   push:
@@ -9,15 +9,15 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Repo'yu Kopyala
+    - name: Repo Kopyala
       uses: actions/checkout@v4
 
-    - name: ZIP Paketine Dönüştür
+    - name: Tum Dosyalari (Logo, MP3, INI) Ziple
       run: |
-        Compress-Archive -Path "PJSK_Custom" -DestinationPath "PJSK_Project_Sekai_Player.zip" -Force
+        Compress-Archive -Path "PJSK_Custom\*" -DestinationPath "PJSK_Ultimate_Player.zip" -Force
 
     - name: Artifact Olarak Kaydet
       uses: actions/upload-artifact@v4
       with:
-        name: PJSK-Custom-Bundle
-        path: PJSK_Project_Sekai_Player.zip
+        name: PJSK-Bundle
+        path: PJSK_Ultimate_Player.zip

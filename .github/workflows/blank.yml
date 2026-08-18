@@ -1,4 +1,4 @@
-name: Build PJSK RMSKIN Package
+name: Build PJSK RMSKIN
 
 on:
   push:
@@ -12,9 +12,8 @@ jobs:
     - name: Repo'yu Kopyala
       uses: actions/checkout@v4
 
-    - name: RMSKIN Uzantılı Paket Oluştur
+    - name: RMSKIN Paketine Dönüştür
       run: |
-        # Klasörü .rmskin formatında zip olarak paketle ve adlandır
         Compress-Archive -Path "PJSK_Custom" -DestinationPath "PJSK_Project_Sekai_Player.rmskin" -Force
 
     - name: Artifact Olarak Kaydet

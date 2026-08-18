@@ -1,4 +1,4 @@
-name: Auto-Build PJSK Package
+name: Build Direct RMSKIN
 
 on:
   push:
@@ -12,24 +12,25 @@ jobs:
     - name: Repo Kopyala
       uses: actions/checkout@v4
 
-    - name: PJSK Klasor Yapisi Olustur ve Ziple
+    - name: Dosyalari RMSKIN Olarak Paketle
       run: |
         $workspace = "$env:GITHUB_WORKSPACE"
         $targetDir = "$workspace\PJSK_Custom"
         
-        # Klasör yoksa oluştur ve gerekli dosyaları içine taşı
-        New-Item -ItemType Directory -Force -Path $targetDir
+        # Eğer dosyalar ana dizindeyse PJSK_Custom klasöründe topla
+        if (-not (Test-Path $targetDir)) {
+            New-Item -ItemType Directory -Force -Path $targetDir
+            Get-ChildItem -Path $workspace -Exclude ".github", "PJSK_Custom", "*.rmskin" | Move-Item -Destination $targetDir -Force
+        }
         
-        Get-ChildItem -Path $workspace -Exclude ".github", "PJSK_Custom", "*.zip" | Move-Item -Destination $targetDir -Force
-        
-        # Zip olarak arşivle
-        $output = "$workspace\PJSK_Project_Sekai_Player.zip"
+        # Doğrudan .rmskin uzantılı arşiv oluştur
+        $output = "$workspace\PJSK_Ultimate_Player.rmskin"
         Compress-Archive -Path $targetDir -DestinationPath $output -Force
         
-        Write-Host "Paket hazir!"
+        Write-Host "RMSKIN dosyasi basariyla olusturuldu!"
 
-    - name: Paketi Artifact Olarak Yukle
+    - name: RMSKIN Dosyasini Artifact Olarak Yukle
       uses: actions/upload-artifact@v4
       with:
-        name: PJSK-Project-Sekai-Player
-        path: PJSK_Project_Sekai_Player.zip
+        name: PJSK-Ultimate-Player-RMSKIN
+        path: PJSK_Ultimate_Player.rmskin

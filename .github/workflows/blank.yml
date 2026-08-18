@@ -12,18 +12,19 @@ jobs:
     - name: Repo Kopyala
       uses: actions/checkout@v4
 
-    - name: PJSK Dosyalarini RMSKIN Formatinda Paketle
+    - name: Ana Dizindeki Tum Dosyalari RMSKIN Olarak Paketle
       run: |
-        $source = "$env:GITHUB_WORKSPACE\PJSK_Source"
+        $workspace = "$env:GITHUB_WORKSPACE"
         $output = "$env:GITHUB_WORKSPACE\PJSK_Ultimate_Player.rmskin"
 
-        Write-Host "Klasor zip/rmskin olarak arsivleniyor..."
-        Compress-Archive -Path "$source\*" -DestinationPath $output -Force
+        Write-Host "Ana dizin arsivleniyor..."
+        # .github klasorunu ve cikan rmskin dosyasini haric tutarak her şeyi ziple
+        Get-ChildItem -Path $workspace -Exclude ".github", "PJSK_Ultimate_Player.rmskin" | Compress-Archive -DestinationPath $output -Force
 
         if (Test-Path $output) {
             Write-Host "RMSKIN basariyla olusturuldu!"
         } else {
-            Write-Error "Paketleme basarisiz oldu!"
+            Error "Paketleme basarisiz oldu!"
             exit 1
         }
 

@@ -1,4 +1,4 @@
-name: Build PJSK RMSKIN
+name: Build PJSK Zip Package
 
 on:
   push:
@@ -12,12 +12,12 @@ jobs:
     - name: Repo'yu Kopyala
       uses: actions/checkout@v4
 
-    - name: RMSKIN Paketine Dönüştür
+    - name: ZIP Paketine Dönüştür
       run: |
-        Compress-Archive -Path "PJSK_Custom" -DestinationPath "PJSK_Project_Sekai_Player.rmskin" -Force
+        Compress-Archive -Path "PJSK_Custom" -DestinationPath "PJSK_Project_Sekai_Player.zip" -Force
 
     - name: Artifact Olarak Kaydet
       uses: actions/upload-artifact@v4
       with:
-        name: PJSK-Custom-Skin
-        path: PJSK_Project_Sekai_Player.rmskin
+        name: PJSK-Custom-Bundle
+        path: PJSK_Project_Sekai_Player.zip

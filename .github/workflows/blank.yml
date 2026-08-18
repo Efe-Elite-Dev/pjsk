@@ -12,15 +12,22 @@ jobs:
     - name: Repo Kopyala
       uses: actions/checkout@v4
 
-    - name: Rainmeter Skin Packager ile RMSKIN Derle
+    - name: Rainmeter'i Otomatik Kur (SkinPackager icin)
       run: |
-        $packager = "C:\Program Files\Rainmeter\Addons\SkinPackager\SkinPackager.exe"
+        Write-Host "Rainmeter indiriliyor..."
+        Invoke-WebRequest -Uri "https://rainmeter.net/releases/r4.5.18/Rainmeter-4.5.18.exe" -OutFile "Rainmeter.exe"
+        Write-Host "Rainmeter sessiz modda kuruluyor..."
+        Start-Process -FilePath "Rainmeter.exe" -ArgumentList "/S" -Wait
+        Write-Host "Kurulum tamamlandi!"
+
+    - name: Skin Packager ile RMSKIN Derle
+      run: |
+        $packager = "$env:LOCALAPPDATA\Programs\Rainmeter\Addons\SkinPackager\SkinPackager.exe"
         $source = "$env:GITHUB_WORKSPACE\PJSK_Source"
         $output = "$env:GITHUB_WORKSPACE\PJSK_Ultimate_Player.rmskin"
-        
-        # Eğer varsayılan yolda yoksa alternatif yolu kontrol et
+
         if (-not (Test-Path $packager)) {
-            $packager = "$env:LOCALAPPDATA\Programs\Rainmeter\Addons\SkinPackager\SkinPackager.exe"
+            $packager = "C:\Program Files\Rainmeter\Addons\SkinPackager\SkinPackager.exe"
         }
 
         Write-Host "Paketleme baslatiliyor..."
